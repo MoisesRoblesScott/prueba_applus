@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ProductosApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="./controller/productoController.js"></script>
+    <title>Document</title>
+</head>
+    <body class="p-3 m-0 border-0 bd-example m-0 border-0" ng-controller="ProductosController">
+        <div class="container rounded-4 shadow-lg mt-5">
+            <div class="row">
+                <div class="col fs-1 text-center">
+                    <span>Table Products</span>
+                </div>
+            </div>
+            <div class="row text-lg-end mb-3 pt-3">
+                <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" ng-click="openModal()">
+                        Agregar
+                    </button>
+                </div>
+
+                <!-- Modal Creacion -->
+                <div id="creationModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Products</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <span>Code</span>
+                                    <input type="text" class="form-control" ng-model="code">
+                                </div>
+                                <div class="col-6">
+                                    <span>Name</span>
+                                    <input type="text" class="form-control" ng-model="name">
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <span>Category</span>
+                                    <select ng-options="category.name for category in categorys track by category.id" ng-model="category" class="form-select" aria-label="Default select example">
+                                        <option value="">Select Category</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <span>Price</span>
+                                    <input type="text" class="form-control" ng-model="price">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button ng-click="agregarProducto()" type="button" class="btn btn-primary"> Register </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal Update -->
+                <div id="updateModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-secondary">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Update Products</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <span>Code</span>
+                                    <input type="text" class="form-control" ng-model="code">
+                                </div>
+                                <div class="col-6">
+                                    <span>Name</span>
+                                    <input type="text" class="form-control" ng-model="name">
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <span>Category</span>
+                                    <select ng-options="category.name for category in categorys track by category.id" ng-model="category" class="form-select" aria-label="Default select example">
+                                        <option value="">Select Category</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <span>Price</span>
+                                    <input type="text" class="form-control" ng-model="price">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button ng-click="updateProducto()" type="button" class="btn btn-primary"> Update </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <table class="table text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col"> Code </th>
+                                <th scope="col"> Name Product </th>
+                                <th scope="col"> Name Category </th>
+                                <th scope="col"> Price </th>
+                                <th scope="col"> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="item in productos" class="table-group-divider">
+                            <tr>
+                                <th scope="row"> {{ item.id }} </th>
+                                <td>{{ item.code }}</td>
+                                <td> {{ item.name_product }} </td>
+                                <td> {{ item.name_category }} </td>
+                                <td> {{ item.price }} </td>
+                                <td> 
+                                    
+                                    <button type="button" class="btn btn-danger" ng-click="deleteProducto(item.id)">
+                                        Delete
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" ng-click="updateModal(item)">
+                                        Update
+                                    </button>
+                                    </tr>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
