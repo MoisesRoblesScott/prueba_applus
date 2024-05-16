@@ -1,0 +1,38 @@
+/* 
+    Consulta 1 - Libros Prestados:
+        Encuentra el título y el autor de los libros actualmente prestados, junto 
+        con el nombre del usuario que los tiene prestados. Incluye también la 
+        fecha de préstamo y la fecha de devolución 
+*/
+
+
+select 
+	l.id as "ID",
+    l.titulo AS 'Título del libro',
+    l.autor AS 'Autor del libro',
+    u.nombre AS 'Nombre del usuario',
+    u.apellido AS 'Apellido del usuario',
+    p.fecha_prestamo AS 'Fecha de Préstamo',
+    p.fecha_devolucion AS 'Fecha de Devolución'
+from prestamo p 
+inner join usuario u on u.id = p.usuario_id 
+inner join libro l on l.id = p.libro_id
+where p.fecha_devolucion is not null;
+
+/* 
+    Consulta 2 - Libros No Devueltos en 7 días:
+        Encuentra los títulos y autores de los libros que fueron prestados hace 
+        más de 7 días y aún no han sido devueltos. Incluye el nombre del 
+        usuario que los tiene prestados y la fecha de préstamo. 
+*/
+
+SELECT 
+    l.titulo AS 'Título del Libro',
+    l.autor AS 'Autor del Libro',
+    u.nombre AS 'Nombre del Usuario',
+    u.apellido AS 'Apellido del Usuario',
+    p.fecha_prestamo AS 'Fecha de Préstamo'
+FROM prestamo p
+JOIN libro l ON p.libro_id = l.id
+JOIN  usuario u ON p.usuario_id = u.id
+WHERE p.fecha_devolucion IS NULL AND p.fecha_prestamo < DATE_SUB(CURDATE(), INTERVAL 7 DAY);
